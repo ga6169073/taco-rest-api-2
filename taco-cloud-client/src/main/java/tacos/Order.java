@@ -28,6 +28,8 @@
 package tacos;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Pattern;
@@ -49,4 +51,5 @@ public class Order {
 	private String ccNumber;
 	private String ccExpiration;
 	private String ccCVV;
+	private List<Taco> tacos = new ArrayList<>();
 }

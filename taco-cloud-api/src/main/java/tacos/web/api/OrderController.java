@@ -26,15 +26,14 @@ public class OrderController {
 	public OrderController(OrderRepository orderRepo) {
 		this.orderRepo = orderRepo;
 	}
-
-	@GetMapping("/recent")
-	public Iterable<Order> getAllIngredients() {
+	@GetMapping
+	public Iterable<Order> getAllOrder() {
 		return orderRepo.findAll();
 	}
 
 	@GetMapping("/{id}")
-	public Order orderById(@PathVariable("id") Long id) {
-		Optional<Order> optOrder = orderRepo.findById(id);
+	public Order orderById(@PathVariable("id") String id) {
+		Optional<Order> optOrder = orderRepo.findById(Long.parseLong(id));
 		if (optOrder.isPresent()) {
 			return optOrder.get();
 		}

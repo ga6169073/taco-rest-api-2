@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
 import lombok.extern.slf4j.Slf4j;
+import tacos.Ingredient;
+import tacos.Ingredient.Type;
 import tacos.Order;
 import tacos.Taco;
 //import tacos.Order.Type;
@@ -24,50 +26,30 @@ import tacos.Taco;
 @Controller
 @RequestMapping("/orders")
 public class OrderController {
-//	@GetMapping("/current")
 	private RestTemplate rest = new RestTemplate();
+	@GetMapping("/current")
 	public String orderForm(Model model) {
 		model.addAttribute("order", new Order());
 		return "orderForm";
 	}
 
 	@PostMapping
-	public String processOrder(Order order) {
-		log.info("Order submitted: " + order);
-		return "redirect:/";
-
-	}
-//	//
+	public String processOrder(@RequestParam("name") String name, @RequestParam("street") String street,
+			@RequestParam("city") String city, @RequestParam("state") String state, @RequestParam("zip") String zip,
+			@RequestParam("ccNumber") String ccNumber, @RequestParam("ccExpiration") String ccExpiration,
+			@RequestParam("ccCVV") String ccCVV) {
+		Order order = new Order();
+		order.setName(name);
+		order.setStreet(street);
+		order.setCity(city);
+		order.setState(state);
+		order.setZip(zip);
+		order.setCcNumber(ccNumber);
+		order.setCcExpiration(ccExpiration);
+		order.setCcCVV(ccCVV);
+		rest.postForObject("http://localhost:8080/orders", order, Order.class);
+		return "redirect:/orders/current";
 //	
-//	@GetMapping
-//	public String showDesignForm(Model model) {
-//		model.addAttribute("order", new Order());
-//		return "design";
 //	}
-//
-//	private List<Order> filterByType(List<Order> orders, Type type) {
-//		List<Order> ingrList = new ArrayList<Order>();
-//		for (Order order : orders) {
-//			if (order.getType().equals(type))
-//
-//				ingrList.add(order);
-//		}
-//		return ingrList;
-//	}
-//
-//	@PostMapping
-//	public String processDesign(@RequestParam("ingredients") String ingredientIds, @RequestParam("name") String name) {
-//		List<Ingredient> ingredients = new ArrayList<Ingredient>();
-//		for (String ingredientId : ingredientIds.split(",")) {
-//			Ingredient ingredient = rest.getForObject("http://localhost:8080/ingredients/{id}", Ingredient.class,
-//					ingredientId);
-//			ingredients.add(ingredient);
-//		}
-//		Taco taco = new Taco();
-//		taco.setName(name);
-//		taco.setIngredients(ingredients);
-//		System.out.println(taco);
-//		rest.postForObject("http://localhost:8080/design", taco, Taco.class);
-//		return "redirect:/orders/current";
-//	}
+	}
 }
